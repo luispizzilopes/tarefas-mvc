@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ToDoMVC.Models.Tarefa>
+
+@{
+    ViewData["Title"] = "Listagem";
+}
+
+<div class="d-flex p-2 align-items-center justify-content-between">
+    <h1 style="margin-bottom: 20px">Listagem de Tarefas</h1>
+    <button type="button" class="btn btn-primary">Adicionar</button>
+
+</div>
+
+<table class="table table-bordered text-center" >
+    <thead>
+        <tr>
+            <th>Id Tarefa</th>
+            <th>Nome Tarefa</th>
+            <th>Descrição Tarefa</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <div class="btn-group align-items-center justify-content-center" role="group" aria-label="Basic mixed styles example">
+                    <button type="button" class="btn btn-warning">Alterar</button>
+                    <button type="button" class="btn btn-danger">Apagar</button>
+                </div>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
