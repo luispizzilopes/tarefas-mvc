@@ -41,9 +41,16 @@ namespace ToDoMVC.Controllers
         {
             Tarefa tarefa = new Tarefa { Name = name, Id = id, Description = description };
 
-            if (tarefa.Id == id)
+            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(description))
             {
-                await tarefasRepository.UpdateTarefa(tarefa, id);
+                if (tarefa.Id == id)
+                {
+                    await tarefasRepository.UpdateTarefa(tarefa, id);
+                }
+            }
+            else
+            {
+                TempData["MensagemDeErro"] = "Por favor, preencha todos os campos.";
             }
 
             return RedirectToAction("Listar");
