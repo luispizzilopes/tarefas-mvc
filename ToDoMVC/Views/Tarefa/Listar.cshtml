@@ -4,13 +4,19 @@
     ViewData["Title"] = "Listagem";
 }
 
+<style>
+    #toast-warn{
+        position: fixed;
+        top: 10px;
+        right: 10px; 
+    }
+</style>
+
 <div class="d-flex p-2 align-items-center justify-content-between">
     <h1 style="margin-bottom: 20px">Listagem de Tarefas</h1>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Adicionar
     </button>
-
-
 </div>
 
 <table class="table table-bordered text-center" >
@@ -34,16 +40,33 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
+     
             <td>
                 <div class="btn-group align-items-center justify-content-center" role="group" aria-label="Basic mixed styles example">
-                    <button type="button" class="btn btn-warning">Alterar</button>
-                    <button type="button" class="btn btn-danger" asp-controller="Tarefa" asp-action="Apagar" asp-route-id=@item.Id>Apagar</button>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalTarefa-@item.Id" style="margin-right: 10px">Alterar</button>
+                    <form method="post" asp-controller="Tarefa" asp-action="Apagar" asp-route-id="@item.Id">
+                        <button type="submit" class="btn btn-danger">Apagar</button>
+                    </form>
                 </div>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+@if (TempData["MensagemDeErro"] != null)
+{
+    <div id="toast-warn" class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+           
+            <strong class="me-auto">Alerta</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Preencha todos os campos e tente novamente!
+        </div>
+    </div>
+}
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -72,3 +95,31 @@
     </div>
 </div>
 
+@foreach (var item in Model) {
+    <div class="modal fade" id="modalTarefa-@item.Id" tabindex="-1" aria-labelledby="modalTarefaLabel-@item.Id" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalTarefaLabel-@item.Id">Atualizar Tarefa</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-controller="Tarefa" asp-action="Atualizar" method="post">
+                    <div class="modal-body">
+                        <label class="form-label">Id da Tarefa</label>
+                        <input class="form-control" value="@item.Id" readonly name="id"/>
+                        <label class="form-label">Nome da Tarefa</label>
+                        <input class="form-control" value="@item.Name" name="name"/>
+                        <label class="form-label">Descrição da Tarefa</label>
+                        <input class="form-control" value="@item.Description" name="description" />
+                    </div>
+             
+                   
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Atualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

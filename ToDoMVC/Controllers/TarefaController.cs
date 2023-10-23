@@ -22,14 +22,34 @@ namespace ToDoMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Adicionar(string name, string description)
         {
-            var tarefa = new Tarefa { Name = name, Description = description };
+            if(name != null && description != null)
+            {
+                var tarefa = new Tarefa { Name = name, Description = description };
 
-            await tarefasRepository.CreateTarefa(tarefa);
+                await tarefasRepository.CreateTarefa(tarefa);
+
+                return RedirectToAction("Listar");
+            }
+
+            TempData["MensagemDeErro"] = "Por favor, preencha todos os campos.";
 
             return RedirectToAction("Listar");
         }
 
-        [HttpDelete]
+        [HttpPost]
+        public async Task<IActionResult> Atualizar(string name, string description, int id)
+        {
+            Tarefa tarefa = new Tarefa { Name = name, Id = id, Description = description };
+
+            if (tarefa.Id == id)
+            {
+                await tarefasRepository.UpdateTarefa(tarefa, id);
+            }
+
+            return RedirectToAction("Listar");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Apagar(int id)
         {
             await tarefasRepository.DeleteTarefa(id);
