@@ -28,6 +28,8 @@ namespace ToDoMVC.Controllers
 
                 await tarefasRepository.CreateTarefa(tarefa);
 
+                TempData["MensagemDeSucesso"] = "Tarefa adicionada com sucesso!";
+
                 return RedirectToAction("Listar");
             }
 
@@ -46,6 +48,8 @@ namespace ToDoMVC.Controllers
                 if (tarefa.Id == id)
                 {
                     await tarefasRepository.UpdateTarefa(tarefa, id);
+
+                    TempData["MensagemDeSucesso"] = "Tarefa atualizada com sucesso!"; 
                 }
             }
             else
